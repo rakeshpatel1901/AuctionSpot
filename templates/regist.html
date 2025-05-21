@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navigation.css' %}">
+</head>
+
+<body>
+    {% include 'pages/navigationbar.html' %}
+    INSIDE REGIST
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.level_tag }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    <div class="register-form">
+
+        <div class="register-form-sub1">The Auction Spot</div>
+
+        <div class="register-form-sub1">
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-field">
+                    <label for="name">Name :</label>
+                    <input type="text" id="name" name="name" class="register-input" required
+                        placeholder="Enter Your Username">
+                </div>
+                <br>
+                <div class="form-field">
+                    <label for="email">Email :</label>
+                    <input type="email" id="email" name="email" class="register-input" required
+                        placeholder="Enter Your Email">
+                </div>
+                <br>
+                <div class="form-field">
+                    <label for="phone">Phone :</label>
+                    <input type="tel" id="phone" name="phone" required maxlength="10" class="register-input"
+                        pattern="^\d{10}$" placeholder="Your Contact Number">
+                </div>
+                <br>
+
+                <div class="form-field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="register-input" required
+                        placeholder="Enter Your Password">
+                </div>
+                <br>
+                <div class="form-field">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="register-input" required
+                        placeholder="Confirm Password">
+                </div>
+                <br>
+                <div class="form-field">
+                    <input type="submit" value="Submit">
+                </div>
+                <a href="{% url 'login' %}">Already have an account? Login</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

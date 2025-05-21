@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <link rel="stylesheet" href="{% static 'css/homedesign.css'%}">
+    <!-- <link rel="stylesheet" href="{% static 'css/tournament_page.css'%}"> -->
+     <link rel="stylesheet" href="{% static 'css/tournament.css' %}">
+</head>
+<body>
+    {% include 'pages/navigationbar.html' %}
+    <div class="main-container">
+            <div class="form-data">
+            <center><h2>Tournament/Auction Details</h2></center>
+            <hr>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="host_auction_form">
+                    <div class="form_tournament">
+                        <div class="form-field">
+                            <label for="tournament_name">Tournament Name :</label>
+                            <input type="text" id="tournament_name" name="tournament_name" placeholder="Enter Tournament Name" class="form-input" >
+                        </div>
+                        <br><br>
+                        
+                        <div class="form-field-category">
+                            <label for="tournament_category">Tournament category : </label>
+                            <select name="tournament_category" id="tournament_category" >Select the Category
+                                <option value="Cricket">Cricket</option>
+                                <option value="Football">Football</option>
+                            </select>
+                        </div>
+                <br><br>
+                
+                <div class="form-field">
+
+                    <label for="budget" >Budget Per Team : </label>
+                    <input type="text" id="budget" name="budget" class="form-input" placeholder="Enter Per Team Budget">
+                </div>
+                <br><br>
+                <div class="form-field">
+
+                    <label for="min_player">Minimun Player : </label>
+                    <input type="text" id="min_player" name="min_player" class="form-input" placeholder="Minimum player required per team">
+                </div>
+                <br><br>
+                <div class="form-field">
+
+                    <label for="max_player">Maximum Player : </label>
+                    <input type="text" id="max_player" name="max_player" class="form-input" placeholder="Maximum player required per team" >
+                </div>
+                <br><br>
+                <div class="form-field-textfield">
+                    <label for="">Tournament Description : </label><br>
+                    <textarea name="tournament_description" id="tournament_description" class="form-input-text" placeholder="Enter the tournament description" ></textarea>
+                </div>
+            </div>
+            <div class="form_auction">
+                <div class="form-field">
+
+                    <label for="auctiondate">Auction Date - Time : </label>
+                    <input type="datetime-local" name="auctiondate" id="auctiondate" class="form-input" >
+                </div>
+                <br><br>
+                <div class="form-field">
+
+                    <label for="total_teams">Total Teams : </label>
+                    <input type="text" name="total_teams" id="total_teams"  class="form-input" placeholder="Enter the No. of Team Participating">
+                </div>
+                <br><br>
+                <div class="form-field-file">
+
+                    <label for="csv_file">Player Records(in csv Format) : </label>
+                    <input type="file" name="csv_file" id="csv_file" required>
+                </div>
+                <br><br>
+                
+            </div>
+            
+        </div>
+        <div class="form-buttons">
+            <input type="reset" value="Reset" id="form-btn-reset">
+            <input type="submit" value="Submit" id="form-btn-submit">
+        </div>
+    </form>
+</div>
+</div>
+</body>
+</html>

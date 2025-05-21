@@ -1,0 +1,45 @@
+nav{
+    width: 100vw;
+    background-color: black;
+    padding: 20px;
+    display : flex;
+    justify-content: space-between;
+
+}
+
+ul{
+    display:flex;
+    flex-direction: row-reverse;
+    margin-right: 30px;
+    
+
+}
+ul li{
+    list-style-type: none;
+    padding-left: 10px;
+    padding-right: 10px; 
+}
+ul li a{
+    color:white;
+    text-decoration: none;
+    padding: 10px;
+    font-size: 20px;
+}
+#auctiontext{
+    position: Absolute;
+    font-size: 40px;
+    color: #FFD700;
+    margin: 0;
+    padding:0;
+    font-weight: bolder;
+    font-style: italic;
+    cursor : pointer;
+    text-shadow: 5px 3px 5px darkred;
+    top:5px;
+}
+#spottext{
+    color:white;
+    font-style:normal;
+    font-size: 30px;
+    text-shadow : 0 0 0 ;
+}

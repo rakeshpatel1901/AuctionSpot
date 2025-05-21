@@ -1,0 +1,281 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic Data Fetching</title>
+  <link rel="stylesheet" href="{% static 'css/team_auction.css' %}">
+  <script>
+    // let auction_id = '{{auction_id}}';  // Replace with the actual auction_id dynamically
+    // let socket = new WebSocket(`ws://localhost:8000/ws/data/${auction_id}/`);
+  
+    // let playerQueue = [];
+    // let currentIndex = 0;
+    // let timeoutId;
+    // let budget = 200;
+    // let basep =200
+    // window.onload = async function() {
+    //     budget = await fetchBudget();
+        
+    // };
+    // socket.onopen = () => {
+    //   console.log("Connected to WebSocket server.");
+    // };
+  
+    // socket.onmessage = (event) => {
+    //   const data = JSON.parse(event.data);
+    //   if (data.success) {
+        
+    //     const row = data.row;
+        
+    //     playerQueue.push(row); // Push the received player data into the queue
+  
+    //     // If this is the first player, start showing their data immediately
+    //     if (playerQueue.length === 1) {
+    //       displayPlayerData();
+    //     }
+    //   } else {
+    //     console.log(data.row); // When all data is sent
+    //   }
+    // };
+    
+    // async function fetchBudget() {
+    //         // Construct the URL based on auction_id
+    //         const ur = "{% url 'get_budget' auction_id=auction_id %}";
+
+    //         // Fetch data from the backend
+    //         fetch(ur)
+    //             .then(response => response.json())  // Parse the JSON response
+    //             .then(data => {
+    //               if (data.budget) {
+                        
+                      
+    //                     return data.budget
+    //                 } else if (data.error) {
+    //                     // Handle error (e.g., auction not found)
+    //                     document.getElementById('budget-display').textContent = `Error: ${data.error}`;
+    //                 }
+    //             })
+    //             .catch(error => {
+    //                 console.log('Error fetching budget:', error);
+                    
+    //             });
+               
+    //     }
+
+    // function displayPlayerData() {
+    //   if (currentIndex < playerQueue.length) {
+    //     const player = playerQueue[currentIndex];
+        
+    //     // Create a new div to display player data
+    //     const rowElement = document.createElement('div');
+    //     const basePriceElement = document.createElement('div');
+        
+    //     basePriceElement.textContent = `Base Price: ${basep}`;
+    //     const buttonElement = document.createElement('button');
+    //     buttonElement.textContent = 'Place Bid';
+    //     buttonElement.onclick = () => {
+    //       const bidData = {
+    //         place_bid: true,   // Flag to indicate a bid is being placed
+    //         player_id: playerId,
+    //         bid_amount: bidAmount,
+    //       };
+    //       socket.send(JSON.stringify(bidData));
+    //       console.log("Bid data sent to backend:", bidData);
+          
+    //     };
+    //     rowElement.textContent = `Player: ${player.player_name}, Runs: ${player.runs}, Wickets: ${player.wickets}`;
+        
+    //     // Append the player data to the container
+    //     document.getElementById('data-container').innerHTML = ''; // Clear existing content
+    //     document.getElementById('data-container').appendChild(rowElement);
+    //     document.getElementById('data-container').appendChild(buttonElement);
+    //     document.getElementById('data-container').appendChild(basePriceElement);
+        
+    //     // Set a timeout to display the next player data after 5 seconds
+    //     timeoutId = setTimeout(() => {
+    //       currentIndex++;
+    //       if (currentIndex < playerQueue.length) {
+    //         displayPlayerData(); // Display next player
+    //       }
+    //     }, 5000); // 5 seconds delay
+    //   }
+    // }
+    
+   
+  
+    // function increaseInterval() {
+    //   socket.send(JSON.stringify({ increase_interval: true }));
+    // }
+
+// Changes made are
+    // Open WebSocket and handle messages
+    let auction_id = '{{auction_id}}';  // Replace with the actual auction_id dynamically
+let socket = new WebSocket(`ws://localhost:8000/ws/individualdata/${auction_id}/`);
+let team_name = '{{team_name}}';
+let playerQueue = [];
+let currentIndex = 0;
+let timeoutId;
+let budget = 200;
+let basep = 100;
+function timer(){
+    let timeLeft = 15;
+  const timeElement = document.querySelector('.time-left');
+  
+  // Countdown every second
+  const countdownInterval = setInterval(function() {
+    if (timeLeft > 0) {
+      timeLeft--;
+      timeElement.innerText = timeLeft;
+    } else {
+      clearInterval(countdownInterval);
+      timeElement.innerText = "Done!";
+    }
+  }, 1000); // Up
+}
+
+window.onload = async function() {
+    // Fetch initial budget when page loads
+    budget = await fetchBudget();
+};
+
+socket.onopen = () => {
+    console.log("Connected to WebSocket server.");
+};
+
+socket.onmessage = (event) => {
+    var data = JSON.parse(event.data);
+    console.log(data);  // Log full data to ensure correctness
+    
+    if(data.player_data.success && data.player_data) {
+        
+        const player = data.player_data.player_data;
+        if(player.player_id =='No'){
+            
+            socket.close();
+            window.location.href = `{% url 'datapage' auction_id=0 team_name="placeholder" %}`
+            .replace('0', auction_id)
+            .replace('placeholder', team_name);
+
+
+        }
+        console.log("Displaying player data:", player);  // Log the player data
+        console.log("Player name:", player.player_name);
+        console.log("Player ID:", player.player_id);
+        if(player.bidAmount){
+            basep = player.bidAmount;
+        }
+        // Display player data correctly
+        displayPlayerData(player);  // Pass the player data to the display function
+    } else {
+        console.log(data.message || "No more data available.");
+    }
+};
+
+// Fetch budget data from the backend
+async function fetchBudget() {
+    const ur = "{% url 'get_budget' auction_id=auction_id %}";
+    const response = await fetch(ur);
+    const data = await response.json();
+    return data.budget || 0;
+}
+
+// Function to display the player data
+function displayPlayerData(player) {
+    if(player.bidAmount <=200){
+        timer();
+    }
+    console.log("Displaying player data:", player); // Log the player data to ensure it exists and is correct
+    console.log("Player name", player['player_name']);
+    let team_name = document.getElementById('team_name').innerHTML;
+    // Ensure player data exists and all properties are valid
+    const playerName = player.player_name || "Unknown Player";
+    const runs = player.runs || 0;
+    const wickets = player.wickets || 0;
+   
+
+    // Get the data container and clear its contents
+    const dataContainer = document.getElementById('btn-place');
+    dataContainer.innerHTML = ""; // Clear the container
+    document.getElementById('player_name').textContent = `${player.player_name}`
+    document.getElementById('player_age').textContent = `${player.player_age}`
+    document.getElementById('matches_played').textContent = `${player.matches_played}`
+    document.getElementById('player_role').textContent = `${player.player_role}`
+    document.getElementById('player_sport').textContent = `${player.sport}`
+    document.getElementById('player_runs').textContent = `${player.runs}`
+    document.getElementById('balls_played').textContent = `${player.balls_played}`
+    document.getElementById('balls_bowled').textContent = `${player.balls_bowled}`
+    document.getElementById('player_wickets').textContent = `${player.wickets}`
+    document.getElementById('player_price').textContent = `${player.bidAmount}`
+    document.getElementById('playerbid_price').textContent = `${player.bidAmount}`
+    // Create a new div for player data
+ 
+
+    const buttonElement = document.createElement('button');
+    buttonElement.textContent = 'Place Bid';
+    buttonElement.onclick = () => {
+        console.log(team_name);
+        if (basep) {
+            const bidData = {
+                'place_bid': true,
+                'team_name':team_name,
+                'player_id': player.player_id,
+                'bid_amount': parseInt(basep, 10),
+            };
+            socket.send(JSON.stringify(bidData));
+        }
+    };
+    dataContainer.appendChild(buttonElement);
+
+    
+}
+
+
+
+  </script>
+  
+</head>
+<body>
+    <div class="main-container">
+        <div class="heading-container">
+            <h2 class="blink"><ul><li>LIVE AUCTION</li></ul></h2>
+            <h2  id="team_name">Team Name :-   {% if team_name %} {{team_name}}{% endif %}</h2>
+        </div>
+        <hr>
+        <div class="sub-container">
+            <div class="live-auction-player">
+                <center><h3>Player Details</h3></center>
+                <hr>
+                <div class="player-img">
+                    <center><img src="{% static 'images/user.png' %}" alt="PlayerImage"></center>
+                </div>
+                <div class="player-details">
+                    <p><b><div class="player_design">Player Name : </div></b><span id="player_name"></span></p>
+                    <p><b><div class="player_design">Player Age : </div></b><span id="player_age"></span></p>
+                    <p><b><div class="player_design">Matches Played: </div></b><span id="matches_played"></span></p>
+                    <p><b><div class="player_design">Player Role : </div></b><span id="player_role"></span></p>
+                    <p><b><div class="player_design">Player sport : </div></b><span id="player_sport"></span></p>
+                    <p><b><div class="player_design">Player Runs : </div></b><span id="player_runs"></span></p>
+                    <p><b><div class="player_design">Balls Played : </div></b><span id="balls_played"></span></p>
+                    <p><b><div class="player_design">Balls Bowled : </div></b><span id="balls_bowled"></span></p>
+                    <p><b><div class="player_design">Player Wickets : </div></b><span id="player_wickets"></span></p>
+                    <p><b><div class="player_design">Player Price : </div></b><span id="player_price"></span></p>
+                </div>
+
+            </div>
+            <div class="timing-detail">
+                <div class="timer">
+                    <div class="circle"></div>
+                    <div class="time-left">10s</div>
+                </div>
+                <p class="new-bid"><b>New Bid : </b><span id="playerbid_price"></span></p>
+                <div id="btn-place"></div>
+            </div>
+            <div class="team-player-detail"></div>
+        </div>
+    </div>
+  
+  
+ 
+</body>
+</html>

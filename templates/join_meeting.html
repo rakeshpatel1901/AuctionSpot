@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Join Auction</title>
+    <link rel="stylesheet" href="{% static 'css/homedesign.css' %}">
+    <link rel="stylesheet" href="{% static 'css/joinmeeting.css' %}">
+</head>
+
+<body>
+    {% include 'pages/navigationbar.html' %}
+
+    <div class="main-container">
+        <div class="sub-container">
+
+            
+            <div class="h2-heading">
+
+                <h2>Join Auction Meeting</h2>
+            </div>
+            
+            
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-field">
+                    <div class="form-label">Team Name</div>
+                    <input type="text" id="team_name" name="team_name" class="form-input" required>
+                </div>
+                <div class="form-field">
+                    <div  class="form-label">Meeting ID</div>
+                    <input type="text" id="meeting_id" name="meeting_id" class="form-input" required>
+                </div>
+                <div class="form-field">
+                    <div  class="form-label">Meeting Password</div>
+                    <input type="text" id="meeting_password" name="meeting_password" class="form-input" required>
+                </div>
+                <input type="hidden" name="tournament_id" value="{{ tournament_id }}">
+                <button type="submit" class="join-btn">Join</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

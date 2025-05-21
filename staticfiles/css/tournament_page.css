@@ -1,0 +1,20 @@
+form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.host_auction_form{
+    display:flex;
+    width: 80vw;
+    padding: 40px;
+    border : 1px solid black;
+    justify-content: center;
+    align-items:center;
+    border-radius: 20px;
+}
+.form_auction{
+    width : 50%;
+}
+.form_tournament{
+    width: 50%;  
+}

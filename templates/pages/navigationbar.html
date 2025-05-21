@@ -1,0 +1,21 @@
+{% load static %}
+
+    <header>
+        <nav class="navigation-nav">
+            <ul id="title" class="navigation-ul">
+                <li><font id="auctiontext">AUCTION <span id="spottext">SPOT</span></font></li>
+            </ul>
+            <ul class="navigation-ul">
+                {% if request.session.user_email %}
+                <li class="navigation-li"><a href='../logout' class="navigation-a">LOGOUT</a></li>
+                <li class="navigation-li"><a href='../status' class="navigation-a">STATUS</a></li>
+                {% else %}
+                {{request.session.user_email}}
+                <li class="navigation-li"><a href='../register' class="navigation-a">SIGNUP</a></li>
+                <li class="navigation-li"><a href='../login' class="navigation-a">LOGIN</a></li>
+                {% endif %}
+                <li class="navigation-li"><a href='#' class="navigation-a">ABOUT</a></li>
+                <li class="navigation-li"><a href='../home' class="navigation-a">HOME</a></li>
+            </ul>
+        </nav>
+    </header>

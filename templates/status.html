@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/homedesign.css'%}">
+    
+    <link rel="stylesheet" href="{% static 'css/status.css' %}">
+</head>
+
+<body>
+    {% include 'pages/navigationbar.html' %}
+    <div class="auction_status_main_container">
+        <center><h2>AUCTION STATUS</h2></center>
+        {% if error %}
+        <p style="color: red;">{{error}}</p>
+        {% elif auction %}
+        <div class="auction_status_block_container">
+            {% for auctions in auction %}
+            <div class="auction_status_mini_block">
+                <p><strong>Tournament Name:</strong>{{ auctions.tournament.tournament_name }}</p>
+                <p><strong>Category:</strong>{{ auctions.tournament.tournament_category }}</p>
+                <p><strong>Auction Date-Time:</strong>{{ auctions.auction_datetime }}</p>
+                <p><strong>Total Teams:</strong>{{ auctions.total_team }}</p>
+                <p><strong>Auction_id:</strong>{{ auctions.auction_id }}</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="action-btn">
+                        <strong>Action : </strong>
+                        <input type="hidden" value='{{ auctions.auction_id }}' name="auction_id">
+                        <button type="submit" name="action" value="join" id="join-btn">Join</button>
+                        <button type="submit" name="action" value="cancel" id="cancel-btn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            <hr>
+            {% endfor %}
+        <div>
+        {% endif %}
+    </div>
+</body>
+</html>

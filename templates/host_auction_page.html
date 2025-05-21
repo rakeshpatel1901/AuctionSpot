@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic Data Fetching</title>
+  <link rel="stylesheet" href="{% static 'css/homedesign.css' %}">
+  <style>
+    
+    .main-field{
+        width: 100%;
+        height: 100vh;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        
+    }
+    .start-field{
+        width:250px;
+        height: 250px;
+        border: 1px solid black;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 20px;
+        box-shadow: 2px 2px 2px gray;
+    }
+    #data-container{
+        height:100vh;
+        width:100%;
+        
+        margin-top: 100px;
+    }
+    #start-btn{
+        width: 80%;
+        height: 50px;
+        background-color: black;
+        color: white;
+        font-size: 18px;
+        border: none;
+        cursor: pointer;
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+    }
+  </style>
+  <script>
+    // Frontend WebSocket Handler
+
+// let auction_id = '{{data.auction_id}}'  // Replace with the actual auction_id dynamically
+
+// let socket = new WebSocket(`ws://localhost:8000/ws/data/${auction_id}/`);
+
+// socket.onopen = () => {
+//     console.log("Connected to WebSocket server.");
+// };
+
+// socket.onmessage = (event) => {
+//     const data = JSON.parse(event.data);
+//     if (data.success) {
+//         const row = data.row;
+//         const rowElement = document.createElement('div');
+//         rowElement.textContent = `Player: ${row.player_name}, Runs: ${row.runs}, Wickets: ${row.wickets}`;
+//         document.getElementById('data-container').appendChild(rowElement);
+//     } else {
+//         console.log(data.row);  // When all data is sent
+//     }
+// };
+
+// function startSending() {
+//     socket.send(JSON.stringify({ start_sending: true }));
+//     location.reload()
+// }
+
+// function increaseInterval() {
+//     socket.send(JSON.stringify({ increase_interval: true }));
+// }
+
+
+// The made changes
+
+let auction_id = '{{data.auction_id}}'; // Replace with the actual auction_id dynamically
+
+// Establish WebSocket connection
+let socket = new WebSocket(`ws://localhost:8000/ws/individualdata/${auction_id}/`);
+function display_data(row) {
+    if(row && row.player_name){
+        const rowElement = document.createElement('div');
+        rowElement.textContent = `Player: ${row.player_name}, Runs: ${row.runs || 0}, Wickets: ${row.wickets || 0}`;
+        document.getElementById('data-container').appendChild(rowElement);
+    }
+    if(row.player_id == 'No'){
+        stopfunction();
+    }else{
+        fetchNextPlayer();
+    }
+   
+   
+}
+socket.onopen = () => {
+    console.log("Connected to WebSocket server.");
+};
+
+socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (data.success) {
+        if(data.player_data){
+            console.log(data.player_data)
+            display_data(data.player_data);
+        }
+        else{
+            stopfunction();
+        }
+
+        // Display the fetched player's data
+    } else {
+        console.log("No more data available or error:", data.message);
+    }
+};
+function stopfunction(){
+    console.log("Auction Finished");
+    socket.close();
+    window.location.href = `{% url 'hostdatapage' auction_id=0 %}`.replace('0', auction_id);
+            
+}
+
+
+function fetchNextPlayer() {
+    // Send a request to fetch the next player
+    socket.send(JSON.stringify({ "fetch_next_player": true }));
+}
+
+function startSending() {
+    let mainField = document.querySelector(".main-field");
+    if (mainField) {
+        mainField.style.display = 'none';
+    }
+    
+    socket.send(JSON.stringify({ fetch_next_player: true }));
+}
+
+
+function increaseInterval() {
+    // Optional: Request the server to increase the interval
+    socket.send(JSON.stringify({ "increase_interval": true }));
+}
+
+
+  </script>
+</head>
+<body>
+    {% include 'pages/navigationbar.html' %}
+    <div class="main-field">
+        <div class="start-field">
+            
+            <button onclick="startSending()" id="start-btn">Start Auction</button>
+        </div>
+    </div>
+   
+  <div id="data-container">
+    Hello
+  </div>
+</body>
+</html>

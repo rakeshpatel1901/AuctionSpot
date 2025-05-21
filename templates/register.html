@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+
+<body>
+    <div class="main-container">
+
+
+        <div class="register-form">
+
+            <div class="register-form-sub1">
+                <div class="the-auction-spot">
+                    <i>"Join the action at our Auction Spot—register now to create or participate in exciting auctions
+                        for
+                        your favorite sports, players, and teams!"</i>
+                    <div class="design-auction-spot">
+                        <font id="auctiontext">AUCTION <span id="spottext">SPOT</span></font>
+                    </div>
+                </div>
+            </div>
+
+            <div class="register-form-sub2">
+                <center>
+                    <h3>Registration Details</h3>
+                </center>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-field">
+                        <label for="name"><i class="fa-solid fa-user"></i></label>
+                        <input type="text" id="name" name="name" class="register-input" required
+                            placeholder="Enter Your Username">
+                    </div>
+                    <br>
+                    <div class="form-field">
+                        <label for="email"><i class="fa-solid fa-envelope"></i></label>
+                        <input type="email" id="email" name="email" class="register-input" required
+                            placeholder="Enter Your Email">
+                    </div>
+                    <br>
+                    <div class="form-field">
+                        <label for="phone"><i class="fa-solid fa-phone"></i></label>
+                        <input type="tel" id="phone" name="phone" required maxlength="10" class="register-input"
+                            pattern="^\d{10}$" placeholder="Your Contact Number">
+                    </div>
+                    <br>
+
+                    <div class="form-field">
+                        <label for="password"><i class="fa-solid fa-lock"></i></label>
+                        <input type="password" id="password" name="password" class="register-input" required
+                            placeholder="Enter Your Password">
+                    </div>
+                    <br>
+                    <div class="form-field">
+                        <label for="confirm_password"><i class="fa fa-key" aria-hidden="true"></i></label>
+                        <input type="password" id="confirm_password" name="confirm_password" class="register-input"
+                            required placeholder="Confirm Password">
+                    </div>
+                    <br>
+                    <div class="form-field-button">
+                        <input type="submit" value="Submit" id="input-button">
+                    </div>
+                    <div class="already-user">
+                        Already have an account?<a href="{% url 'login' %}">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

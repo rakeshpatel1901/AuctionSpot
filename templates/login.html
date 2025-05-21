@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="main-container">
+
+
+        <div class="register-form">
+
+
+            <div class="register-form-sub2">
+                <center>
+                    <h3>Login Details</h3>
+                </center>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="form-field">
+                        <label for="email"><i class="fa-solid fa-envelope"></i></label>
+                        <input type="email" id="email" name="email" class="register-input" required
+                            placeholder="Enter Your Email">
+                    </div>
+                    <br>
+
+
+                    <div class="form-field">
+                        <label for="password"><i class="fa-solid fa-lock"></i></label>
+                        <input type="password" id="password" name="password" class="register-input" required
+                            placeholder="Enter Your Password">
+                    </div>
+                    <br>
+
+                    <div class="form-field-button">
+                        <input type="submit" value="Submit" id="input-button">
+                    </div>
+                    <div class="already-user">
+                        New Member?<a href="../register">SignUp</a>
+                    </div>
+                </form>
+            </div>
+            <div class="register-form-sub1">
+                <div class="the-auction-spot">
+                    <i>"Join the action at our Auction Spot—register now to create or participate in exciting auctions
+                        for
+                        your favorite sports, players, and teams!"</i>
+                    <div class="design-auction-spot">
+                        <font id="auctiontext">AUCTION <span id="spottext">SPOT</span></font>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>IPL Auction</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+</head>
+<body>
+    <h1>Live IPL Auction</h1>
+    
+    <!-- Player Details -->
+    <div id="playerDetails">
+        <h2>Player: <span id="playerName">Unknown</span></h2>
+        <p>Base Price: <span id="basePrice">20L</span></p>
+    </div>
+    
+    <!-- Current Bid -->
+    <div id="currentBid">
+        Current Bid: <span id="currentBidAmt">20L</span>
+    </div>
+    
+    <!-- User Bidding -->
+    <div>
+        <button id="bidButton" onclick="placeBid()">Bid Now!</button>
+    </div>
+    
+    <!-- Host Controls -->
+    <div id="hostControls" style="margin-top: 20px; display: none;">
+        <h3>Host Controls</h3>
+        <button onclick="increaseBid('20L')">+20L</button>
+        <button onclick="increaseBid('40L')">+40L</button>
+        <button onclick="increaseBid('1Cr')">+1Cr</button>
+    </div>
+
+    <script>
+        const socket = io.connect('http://localhost:8000');
+        const basePrice = '20L'; // Initial base price
+        const playerId = 1; // Example player ID
+
+        // Set initial bid amount
+        let currentBid = basePrice;
+
+        // Check if the user is the host
+        const isHost = true; // Update this based on the user's role (e.g., session or server validation)
+        if (isHost) {
+            document.getElementById('hostControls').style.display = 'block';
+        }
+
+        // Update the bid amount
+        function increaseBid(amount) {
+            currentBid = amount;
+            document.getElementById('currentBidAmt').innerText = currentBid;
+            socket.emit('update_bid', { player_id: playerId, bid_amt: currentBid });
+        }
+
+        // User places a bid
+        function placeBid() {
+            axios.post('/place-bid/', {
+                player_id: playerId,
+                bid_amt: currentBid,
+            })
+            .then(response => {
+                if (response.data.success) {
+                    alert('You have placed a bid of ' + currentBid);
+                } else {
+                    alert(response.data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error placing bid:', error);
+            });
+        }
+
+        // Listen for bid updates from the host
+        socket.on('update_bid', data => {
+            if (data.player_id === playerId) {
+                currentBid = data.bid_amt;
+                document.getElementById('currentBidAmt').innerText = currentBid;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  overflow: hidden;
+  position: relative;
+  height: 100vh; /* Ensure the body takes the full height of the viewport */
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('../images/registration_page.png');
+  background-size: cover;
+  filter: blur(18px); 
+  z-index: -1;  
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+}
+.main-container{
+  height: 100vh;
+  width : 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;    
+}
+.verify-block{
+  width: 350px;
+  height: 300px;
+  background-color: whitesmoke;
+  border-radius: 30px;
+  box-shadow: 10px 12px 12px 4px grey;
+}
+.verify-block center h3{
+  padding:10px  20px;
+}
+.verify-block form{
+  padding: 5px 20px ;
+}
+.otp-input{
+  border:none;
+  outline:none;
+  margin : 0px 5px;
+  padding: 6px 10px; 
+  border-left: 2px solid gray;
+  
+}
+form{
+  margin-top: 20px;
+}
+.form-field{
+  border-bottom : 1px solid gray;
+  width: 100%;
+  margin : 2px auto;
+  padding: 4px 8px;
+  border-radius: 10px;
+  background-color: white; 
+  font-size: 24px;
+  
+}
+
+.input-btn{
+  border: none;
+  padding: 10px 20px;
+  background-color: #FFD700;
+  border-radius: 20px;
+  margin: 2px auto;
+}

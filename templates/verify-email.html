@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/verifyemail.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="verify-block">
+            <center><h3>Verify your Email Id</h3></center>
+            <hr>
+            <form method="post">
+                {% csrf_token %}
+                <p>An verification OTP is being sent to your Account. Please Verify the email before proceeding</p>
+                <div class="form-field">
+                    <label for="verification_code"><i class="fas fa-mobile-alt"></i></label>
+                    <input type="text" name="verification_code" placeholder="Enter the OTP" class="otp-input">
+                </div>
+
+                <br>
+                <center><input type="submit" value="Submit" class="input-btn"></center>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
